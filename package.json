@@ -1,0 +1,25 @@
+{
+  "name": "ado-work-item-creator",
+  "version": "1.0.0",
+  "description": "Create ADO Work Items",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node dist/index.js",
+    "dev": "npx ts-node --esm src/index.ts",
+    "clean": "rimraf dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "azure-devops-node-api": "^15.1.2",
+    "dotenv": "^17.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.2",
+    "rimraf": "^6.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
