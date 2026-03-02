@@ -6,12 +6,14 @@ A TypeScript Node.js application for programmatically creating Azure DevOps (ADO
 
 - Create ADO work items via the Azure DevOps API
 - Template-based work item creation with variable substitution
+- Interactive console UI for browsing and selecting work item templates
+- Folder navigation within the `work-item-templates` directory
 - TypeScript with strict type checking
 - Environment-based configuration
 
 ## Prerequisites
 
-- Node.js v14 or higher
+- Node.js v25.6.1 or higher
 - npm
 - Azure DevOps account with API access
 - Personal Access Token (PAT) for Azure DevOps authentication
@@ -40,25 +42,36 @@ PROJECT=your-ado-project-name
 
 ## Usage
 
-Run the application:
+Run the application in console mode:
 
 ```bash
-npm start
+npm start -- --console
 ```
 
-This will execute the ADO Work Item Creator with the configuration from your `.env` file.
+This will launch the interactive console UI, allowing you to browse the `work-item-templates` folder, select a template, and create a work item in Azure DevOps.
+
+> **Note:** Running `npm start` without `--console` will display a message indicating that GUI mode is not yet implemented.
 
 ## Project Structure
 
 ```
 ├── src/
-│   └── index.ts              # Main entry point
+│   ├── index.ts                        # Main entry point
+│   ├── core/
+│   │   └── TemplateProcessor.ts        # Reads templates and calls the ADO API
+│   ├── ui/
+│   │   ├── console/
+│   │   │   └── ConsoleHandler.ts       # Interactive console UI
+│   │   └── web/
+│   │       └── WebHandler.ts           # Web UI (not yet implemented)
+│   └── utils/
+│       └── ErrorCodeGenerator.ts       # Standardised error codes
 ├── work-item-templates/
-│   └── workItemTemplate.json # Template for work item creation
-├── tests/                    # Test files
-├── package.json              # Project dependencies and scripts
-├── tsconfig.json             # TypeScript configuration
-└── README.md                 # This file
+│   └── workItemTemplate.json           # Example work item template
+├── tests/                              # Test files
+├── package.json                        # Project dependencies and scripts
+├── tsconfig.json                       # TypeScript configuration
+└── README.md                           # This file
 ```
 
 ## Work Item Templates
@@ -68,7 +81,7 @@ Work item templates are defined in JSON format. Example template:
 ```json
 {
     "project": "Test",
-    "type": "Task",
+    "workItemType": "Task",
     "System.Title": "Test Work Item from Template",
     "System.Description": "This work item was created from a JSON template with variables. Here is a variable {{Variable1}}.",
     "System.IterationPath": "Test",
