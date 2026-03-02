@@ -62,7 +62,9 @@ export class ConsoleHandler {
                 return undefined;
             }
 
-            workItemTemplates.unshift("../"); // Add option at start to go back to parent folder
+            if (currentFolder !== "") {
+                workItemTemplates.unshift("../"); // Add option at start to go back to parent folder
+            }
             workItemTemplates.push("Exit"); // Add option to exit program at end of list
 
             for (let i = 0; i < workItemTemplates.length; i++) {
@@ -157,7 +159,7 @@ export class ConsoleHandler {
         for (let variable in variableValues) {
             const value = variableValues[variable];
             const regex = new RegExp(`\\{\\{${variable}\\}\\}`, "g");
-            finalWorkItem = finalWorkItem.replace(regex, value);
+            finalWorkItem = finalWorkItem.replace(regex, () => value);
         }
 
         return JSON.parse(finalWorkItem);

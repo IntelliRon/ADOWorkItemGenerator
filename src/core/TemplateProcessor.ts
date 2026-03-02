@@ -22,6 +22,11 @@ export class TemplateProcessor {
             process.exit(1);
         }
 
+        if (!process.env.ORG) {
+            console.error("Error: ORG environment variable not set in .env file");
+            process.exit(1);
+        }
+
         this.orgUrl = "https://dev.azure.com/" + process.env.ORG;
     }
 
@@ -161,11 +166,11 @@ export class TemplateProcessor {
             console.debug("DEBUG: operations =", JSON.stringify(operations, null, 2));
 
             // Get project and type - required for creation
-            let project = process.env.PROJECT;
+            let project = process.env.PROJECT || template.templateData.project;
             let type = template.templateData.workItemType;
 
             if (!project) {
-                console.error("Error: PROJECT environment variable not set");
+                console.error("Error: PROJECT variable not set in .env file and 'project' field not found in template data");
                 return ErrorCodeGenerator.getErrorCode("MISSING_PROJECT");
             }
 

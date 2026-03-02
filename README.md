@@ -31,12 +31,12 @@ npm install
 Create a `.env` file in the project root with the following variables:
 
 ```
-AZURE_PERSONAL_ACCESS_TOKEN=your-personal-access-token-here
+PERSONAL_ACCESS_TOKEN=your-personal-access-token-here
 ORG=your-ado-organization-name
 PROJECT=your-ado-project-name
 ```
 
-- **AZURE_PERSONAL_ACCESS_TOKEN** - Your Azure DevOps Personal Access Token (required for API authentication)
+- **PERSONAL_ACCESS_TOKEN** - Your Azure DevOps Personal Access Token (required for API authentication)
 - **ORG** - Your Azure DevOps organization name (required)
 - **PROJECT** - Your Azure DevOps project name (required)
 
