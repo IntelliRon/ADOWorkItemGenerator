@@ -14,7 +14,6 @@ This workspace contains a TypeScript Node.js project for creating ADO Work Items
 - **Build Output:** dist/
 - **Project Structure:**
   - `src/` - TypeScript source code files
-  - `tests/` - Test files
   - `dist/` - Compiled JavaScript (generated)
   - `tsconfig.json` - TypeScript compiler configuration
   - `package.json` - Project configuration
@@ -26,7 +25,9 @@ This workspace contains a TypeScript Node.js project for creating ADO Work Items
 - `npm run clean` - Remove build artifacts
 
 ### Environment Variables Required
-- `AZURE_PERSONAL_ACCESS_TOKEN` - Personal access token for Azure DevOps
+- `PERSONAL_ACCESS_TOKEN` - Personal access token for Azure DevOps
+- `ORG` - Azure DevOps organization
+- `PROJECT` - Azure DevOps project
 
 ### Development Guidelines
 - All source code should be in the `src/` directory

@@ -95,6 +95,7 @@ export class ConsoleHandler {
             if (answerIndex === 0 && currentFolder !== "") {
                 currentFolder = path.dirname(currentFolder);
                 answerIndex = -1;
+                continue;
             } else if (answerIndex === workItemTemplates.length - 1) {
                 rl.close();
                 return undefined;

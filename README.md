@@ -68,7 +68,6 @@ This will launch the interactive console UI, allowing you to browse the `work-it
 │       └── ErrorCodeGenerator.ts       # Standardised error codes
 ├── work-item-templates/
 │   └── workItemTemplate.json           # Example work item template
-├── tests/                              # Test files
 ├── package.json                        # Project dependencies and scripts
 ├── tsconfig.json                       # TypeScript configuration
 └── README.md                           # This file
@@ -80,12 +79,15 @@ Work item templates are defined in JSON format. Example template:
 
 ```json
 {
-    "project": "Test",
-    "workItemType": "Task",
-    "System.Title": "Test Work Item from Template",
-    "System.Description": "This work item was created from a JSON template with variables. Here is a variable {{Variable1}}.",
-    "System.IterationPath": "Test",
-    "System.State": "To Do"
+    "creationMode": "single",
+    "templateData": {
+        "project": "Test",
+        "workItemType": "Task",
+        "System.Title": "Test Work Item from Template",
+        "System.Description": "This work item was created from a JSON template with variables. Here is a variable {{Variable1}}.",
+        "System.IterationPath": "Test",
+        "System.State": "To Do"
+    }
 }
 ```
 
