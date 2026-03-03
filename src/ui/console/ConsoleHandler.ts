@@ -93,7 +93,8 @@ export class ConsoleHandler {
             }
 
             if (answerIndex === 0 && currentFolder !== "") {
-                currentFolder = path.dirname(currentFolder);
+                const parentFolder = path.dirname(currentFolder);
+                currentFolder = parentFolder === "." ? "" : parentFolder;
                 answerIndex = -1;
                 continue;
             } else if (answerIndex === workItemTemplates.length - 1) {
