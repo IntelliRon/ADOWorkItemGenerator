@@ -7,6 +7,7 @@ A TypeScript Node.js application for programmatically creating Azure DevOps (ADO
 - Create ADO work items via the Azure DevOps API
 - Template-based work item creation with variable substitution
 - Interactive console UI for browsing and selecting work item templates
+- Web UI for browsing templates and creating work items in single template mode
 - Folder navigation within the `work-item-templates` directory
 - TypeScript with strict type checking
 - Environment-based configuration
@@ -42,15 +43,23 @@ PROJECT=your-ado-project-name
 
 ## Usage
 
+Run the application in web UI mode (default):
+
+```bash
+npm start
+```
+
+This will launch the web UI on [http://localhost:3000](http://localhost:3000), allowing you to browse the `work-item-templates` folder, select a template, fill in any template variables, and create a work item in Azure DevOps.
+
+> **Note:** Currently, only templates with `"creationMode": "single"` are supported in the web UI.
+
 Run the application in console mode:
 
 ```bash
 npm start -- --console
 ```
 
-This will launch the interactive console UI, allowing you to browse the `work-item-templates` folder, select a template, and create a work item in Azure DevOps.
-
-> **Note:** Running `npm start` without `--console` will display a message indicating that GUI mode is not yet implemented.
+This will launch the interactive console UI instead.
 
 ## Project Structure
 
@@ -63,7 +72,11 @@ This will launch the interactive console UI, allowing you to browse the `work-it
 │   │   ├── console/
 │   │   │   └── ConsoleHandler.ts       # Interactive console UI
 │   │   └── web/
-│   │       └── WebHandler.ts           # Web UI (not yet implemented)
+│   │       ├── WebHandler.ts           # Web UI handler
+│   │       └── app/
+│   │           ├── app.ts              # Express web app
+│   │           ├── public/             # Static assets (CSS, JS)
+│   │           └── views/              # EJS templates
 │   └── utils/
 │       └── ErrorCodeGenerator.ts       # Standardised error codes
 ├── work-item-templates/
