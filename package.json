@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && xcopy /E /I /Y src\\ui\\web\\app dist\\ui\\web\\app",
     "start": "npm run build && node dist/index.js",
     "dev": "npx ts-node --esm src/index.ts",
     "clean": "rimraf dist"
@@ -14,9 +14,12 @@
   "license": "ISC",
   "dependencies": {
     "azure-devops-node-api": "^15.1.2",
-    "dotenv": "^17.3.1"
+    "dotenv": "^17.3.1",
+    "ejs": "^5.0.1",
+    "express": "^5.2.1"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/node": "^25.3.2",
     "rimraf": "^6.0.0",
     "ts-node": "^10.9.2",

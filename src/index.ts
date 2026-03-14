@@ -2,6 +2,7 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 
 import { ConsoleHandler } from "./ui/console/ConsoleHandler.js";
+import { WebApp } from "./ui/web/app/app.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -18,7 +19,9 @@ async function main() {
 
         await consoleHandler.run();
     } else {
-        console.log("GUI mode is not implemented yet. Please run with --console to use the console mode.");
+        const webHandler = new WebApp(__dirname);
+        webHandler.run();
+        //console.log("GUI mode is not implemented yet. Please run with --console to use the console mode.");
     }
 }
 

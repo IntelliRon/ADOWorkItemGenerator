@@ -3,10 +3,11 @@
     "templateData": {
         "workItemType": "User Story",
         "parentId": "{{ParentId}}",
+        "System.AssignedTo": "{{AssignedTo}}",
         "System.Title": "Test Work Item from Template",
         "System.Description": "<p>This work item was created from a JSON template with variables. Here is a variable {{Variable1}}.</p>",
         "Microsoft.VSTS.Common.AcceptanceCriteria": "<p>1. The work item should be created successfully in Azure DevOps.</p><p>2. The title, description, and acceptance criteria should match the values defined in the template.</p><p>3. The variable {{Variable1}} should be replaced with the actual value when the work item is created.</p>",
         "System.IterationPath": "Test",
-        "System.State": "To Do"
+        "System.State": "New"
     }
 }

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>ADO Work Item Creator</title>
+
+	<link rel="stylesheet" href="/css/index.css">
+	<link rel="icon" href="data:,">
+</head>
+
+<body>
+	<h2>ADO Work Item Creator</h2>
+
+	<!-- Breadcrumb navigation -->
+	<div class="breadcrumb">
+		<% if (currentDir !== "root") { %>
+		<span>Path: </span>
+		<a href="/">Root</a> /
+		<% let dirParts = currentDir.split("/").filter(part => part.length > 0); %>
+		<% dirParts.forEach((part, index) => { %>
+		<a href="/?folder=<%= dirParts.slice(0, index + 1).join("/") %>"><%= part %></a>
+		<% if (index < dirParts.length - 1) { %> / <% } %>
+		<% }) %>
+		<% } else { %>
+		<span>Path: </span><span>Root</span>
+		<% } %>
+	</div>
+
+	<!-- Display success message if work item was created -->
+	<div class="infoBoxContainer infoBoxSuccess">
+		<% if (workItemId>= 0) { %>
+		<span>Work item <%= workItemId %> created successfully!</span>
+		<% } else if (workItemId < 0) { %>
+		<span>Error creating work item. Following error occurred: <%= workItemError %></span>
+		<% } %>
+		<button class="closeInfoBoxButton" onclick="this.parentElement.style.display='none';">X</button>
+	</div>
+
+	<div id="templateListContainer">
+		<% if (templates && templates.length> 0) { %>
+		<h3>Available Templates:</h3>
+		<ul>
+			<% templates.forEach(template=> { %>
+			<li class="templateListItem">
+				<% if (template.endsWith("/")) { %>
+				<!-- Join current folder with new folder from template -->
+				<a class="folderButton" href="/?folder=<%= currentDir !== "root" ? currentDir + template : template %>">
+					<%= template %>
+				</a>
+				<% } else { %>
+				<a class="templateButton" href="/template/<%= currentDir !== "root" ? currentDir + template : template %>">
+					<%= template %>
+				</a>
+				<% } %>
+			</li>
+			<% }) %>
+		</ul>
+		<% } else { %>
+		<p>No templates available.</p>
+		<% } %>
+	</div>
+</body>
+
+</html>

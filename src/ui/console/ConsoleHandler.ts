@@ -2,8 +2,8 @@ import * as fs from "fs";
 import * as path from "path";
 import * as readline from 'readline';
 import { TemplateProcessor } from "../../core/TemplateProcessor.js";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
+import { findTemplateVariables } from "../../core/findTemplateVariables.js";
+import { replaceTemplateVariables } from "../../core/replaceTemplateVariables.js";
 
 export class ConsoleHandler {
     basePath: string;
@@ -128,15 +128,8 @@ export class ConsoleHandler {
      * @param template The work item template JSON object
      * @returns The final work item JSON object with all variables replaced with user-provided values
      */
-    async replaceTemplateVariables(template: any): Promise<any> {
-        // Find all variables in the template
-        const variableRegex = /\{\{(\w+)\}\}/g;
-        let variables: Set<string> = new Set();
-        let match;
-
-        while ((match = variableRegex.exec(JSON.stringify(template))) !== null) {
-            variables.add(match[1]);
-        }
+    async interactiveReplaceTemplateVariables(template: any): Promise<any> {
+        let variables = findTemplateVariables(template);
 
         // Ask user to provide values for each variable
         const rl = readline.createInterface({
@@ -156,15 +149,7 @@ export class ConsoleHandler {
 
         rl.close();
 
-        // Replace all variables in the template with user-provided values
-        let finalWorkItem = JSON.stringify(template);
-        for (let variable in variableValues) {
-            const value = variableValues[variable];
-            const regex = new RegExp(`\\{\\{${variable}\\}\\}`, "g");
-            finalWorkItem = finalWorkItem.replace(regex, () => value);
-        }
-
-        return JSON.parse(finalWorkItem);
+        return replaceTemplateVariables(template, variableValues);
     }
 
     /**
@@ -187,7 +172,7 @@ export class ConsoleHandler {
                 }
 
                 // Process the template to replace variables with user-provided values
-                const finalWorkItemJSON = await this.replaceTemplateVariables(template);
+                const finalWorkItemJSON = await this.interactiveReplaceTemplateVariables(template);
                 await this.templateProcessor.createSingleWorkItem(finalWorkItemJSON);
             } else {
                 console.log("No template file selected. Exiting.");

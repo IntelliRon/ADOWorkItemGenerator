@@ -99,7 +99,7 @@ export class TemplateProcessor {
      * The function converts the template into the format required by the Azure DevOps API and creates the work item.
      * 
      * @param template The work item template JSON object
-     * @return The ID of the created work item or -1 if there was an error
+     * @return The ID of the created work item or negative number if creation failed
      */
     async createSingleWorkItem(template: { [key: string]: any }): Promise<number> {
         try {
