@@ -81,16 +81,15 @@ export class WebApp {
                 return;
             }
 
+            let workItemError: string | undefined = undefined;
             if (workItemId) {
                 let workItemIdNumber: number | undefined = Number(workItemId);
                 if (workItemIdNumber <= 0) {
-                    const workItemError = ErrorCodeGenerator.getErrorMessage(workItemIdNumber);
-                    res.render("pages/index", { templates, currentDir, workItemId, workItemError });
-                    return;
+                    workItemError = ErrorCodeGenerator.getErrorMessage(workItemIdNumber);
                 }
             }
 
-            res.render("pages/index", { templates, currentDir, workItemId });
+            res.render("pages/index", { templates, currentDir, workItemId, workItemError });
         });
 
         app.get("/template/*templatePath", (req, res) => {
@@ -107,7 +106,11 @@ export class WebApp {
             const fullTemplatePath = path.join(this.basePath, "../work-item-templates", templatePath);
             const templateData = this.templateProcessor.getWorkItemTemplateFromFile(fullTemplatePath);
 
-            console.log("templateData:", templateData);
+            const missingVariables = Array.from(findTemplateVariables(templateData)).filter(variable => !(variable in templateVariables) || templateVariables[variable].trim() === "");
+            if (missingVariables.length > 0) {
+                res.status(400).json({ error: "Missing template variables: " + missingVariables.join(", ") });
+                return;
+            }
 
             // Call function to create work item in Azure DevOps using the templateData
             if (templateData.creationMode === "single") {

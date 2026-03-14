@@ -31,14 +31,16 @@
 	</div>
 
 	<!-- Display success message if work item was created -->
+	<% if (workItemId || workItemError) { %>
 	<div class="infoBoxContainer infoBoxSuccess">
 		<% if (workItemId>= 0) { %>
 		<span>Work item <%= workItemId %> created successfully!</span>
-		<% } else if (workItemId < 0) { %>
+		<% } else if (workItemId < 0 || workItemError) { %>
 		<span>Error creating work item. Following error occurred: <%= workItemError %></span>
 		<% } %>
 		<button class="closeInfoBoxButton" onclick="this.parentElement.style.display='none';">X</button>
 	</div>
+	<% } %>
 
 	<div id="templateListContainer">
 		<% if (templates && templates.length> 0) { %>

@@ -10,7 +10,6 @@ $(document).ready(function () {
         if (queryParamIndex !== -1) {
             templatePath = templatePath.substring(0, queryParamIndex);
         }
-        console.log(templatePath);
         const templateVariables = {};
         $(".templateVariable").each(function () {
             const variableName = $(this).attr("name");
@@ -30,7 +29,7 @@ $(document).ready(function () {
             error: function (response) {
                 // Show error pane on page
                 $("#errorMessage").text(response.responseJSON?.error || "An error occurred while creating the work item.");
-                $("#errorContainer").show();
+                $("#errorContainer").css("display", "flex");
             },
         });
     });
