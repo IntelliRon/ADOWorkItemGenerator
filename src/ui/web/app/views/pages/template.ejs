@@ -24,7 +24,8 @@
 		<a href="/">Root</a> /
 		<% let dirParts = templatePath.split("/").filter(part => part.length > 0); %>
 		<% dirParts.forEach((part, index) => { %>
-		<a href="/?folder=<%= dirParts.slice(0, index + 1).join("/") %>"><%= part %></a>
+		<% const folderPath = dirParts.slice(0, index + 1).join("/"); %>
+		<a href="/?folder=<%= encodeURIComponent(folderPath) %>"><%= part %></a>
 		<% if (index < dirParts.length - 1) { %> / <% } %>
 		<% }) %>
 	</div>

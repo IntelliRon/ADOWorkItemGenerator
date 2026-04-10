@@ -49,7 +49,7 @@ export class WebApp {
 
         app.get("/", (req, res) => {
             // If redirected from post request after creating work item, show success message with work item number
-            const workItemId = req.query.workItemId;
+            const workItemIdQuery = req.query.workItemId;
             let currentDir = req.query.folder || "root";
 
             if (typeof currentDir !== "string") {
@@ -65,7 +65,7 @@ export class WebApp {
                 currentDir = dirParts.length > 0 ? dirParts.join("/") + "/" : "root";
 
                 // Fix the URL on client side to remove the ../ from the URL query parameter
-                res.redirect("/?folder=" + currentDir + (workItemId ? "&workItemId=" + workItemId : ""));
+                res.redirect("/?folder=" + currentDir + (workItemIdQuery ? "&workItemId=" + workItemIdQuery : ""));
                 return;
             }
 
@@ -82,31 +82,87 @@ export class WebApp {
             }
 
             let workItemError: string | undefined = undefined;
-            if (workItemId) {
-                let workItemIdNumber: number | undefined = Number(workItemId);
-                if (workItemIdNumber <= 0) {
-                    workItemError = ErrorCodeGenerator.getErrorMessage(workItemIdNumber);
+            let workItemId: number | undefined = undefined;
+
+            if (typeof workItemIdQuery === "string" && workItemIdQuery.trim().length > 0) {
+                const parsedWorkItemId: number = Number(workItemIdQuery.trim());
+
+                if (!Number.isNaN(parsedWorkItemId)) {
+                    workItemId = parsedWorkItemId;
+                    if (parsedWorkItemId <= 0) {
+                        workItemError = ErrorCodeGenerator.getErrorMessage(parsedWorkItemId);
+                    }
+                } else {
+                    workItemError = "Invalid work item ID.";
                 }
             }
 
             res.render("pages/index", { templates, currentDir, workItemId, workItemError });
         });
 
-        app.get("/template/*templatePath", (req, res) => {
-            const templatePath = req.params.templatePath.join("/");
+        app.get("/template/:templatePath(*)", (req, res) => {
+            const templatePathParam: string | undefined = req.params.templatePath;
+            if (typeof templatePathParam !== "string") {
+                res.status(400).send("Invalid template path parameter");
+                return;
+            }
+            const templatePath: string = templatePathParam;
             const fullTemplatePath = path.join(this.basePath, "../work-item-templates", templatePath);
             const templateData = this.templateProcessor.getWorkItemTemplateFromFile(fullTemplatePath);
+            if (!templateData) {
+                res.status(404).send("Template not found or invalid.");
+                return;
+            }
             const templateVariables = findTemplateVariables(templateData);
             res.render("pages/template", { templatePath, templateData, templateVariables });
         });
 
-        app.post("/template/*templatePath", async (req, res) => {
-            const templatePath = req.params.templatePath.join("/");
-            const templateVariables = req.body;
+        app.post("/template/:templatePath(*)", async (req, res) => {
+            const templatePathParam: string | undefined = req.params.templatePath;
+            if (typeof templatePathParam !== "string") {
+                res.status(400).send("Invalid template path parameter");
+                return;
+            }
+            const templatePath: string = templatePathParam;
+            const rawTemplateVariables: unknown = req.body;
+
+            // Ensure the request body is a non-null object and not an array
+            if (
+                rawTemplateVariables === null ||
+                typeof rawTemplateVariables !== "object" ||
+                Array.isArray(rawTemplateVariables)
+            ) {
+                res.status(400).json({ error: "Invalid request body. Expected an object with template variables." });
+                return;
+            }
+
+            // Coerce allowed values to strings and reject unsupported value types
+            const templateVariables: Record<string, string> = {};
+            for (const [key, value] of Object.entries(rawTemplateVariables as Record<string, unknown>)) {
+                if (typeof value === "string") {
+                    templateVariables[key] = value;
+                } else if (value === null || value === undefined) {
+                    // Treat null/undefined as empty string so they are considered "missing"
+                    templateVariables[key] = "";
+                } else if (typeof value === "number" || typeof value === "boolean") {
+                    templateVariables[key] = String(value);
+                } else {
+                    res.status(400).json({ error: `Invalid type for template variable "${key}". Expected a string or primitive value.` });
+                    return;
+                }
+            }
+
             const fullTemplatePath = path.join(this.basePath, "../work-item-templates", templatePath);
             const templateData = this.templateProcessor.getWorkItemTemplateFromFile(fullTemplatePath);
+            if (!templateData) {
+                res.status(400).json({ error: "Template not found or invalid." });
+                return;
+            }
 
-            const missingVariables = Array.from(findTemplateVariables(templateData)).filter(variable => !(variable in templateVariables) || templateVariables[variable].trim() === "");
+            const missingVariables = Array.from(findTemplateVariables(templateData)).filter(variable => {
+                const value = templateVariables[variable];
+                return !(variable in templateVariables) || value.trim() === "";
+            });
             if (missingVariables.length > 0) {
                 res.status(400).json({ error: "Missing template variables: " + missingVariables.join(", ") });
                 return;
