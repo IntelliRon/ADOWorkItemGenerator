@@ -100,13 +100,13 @@ export class WebApp {
             res.render("pages/index", { templates, currentDir, workItemId, workItemError });
         });
 
-        app.get("/template/:templatePath(*)", (req, res) => {
-            const templatePathParam: string | undefined = req.params.templatePath;
-            if (typeof templatePathParam !== "string") {
+        app.get("/template/*templatePath", (req, res) => {
+            const templatePathArray: string[] | string | undefined = (req.params as any).templatePath;
+            const templatePath: string = Array.isArray(templatePathArray) ? templatePathArray.join("/") : templatePathArray as string;
+            if (!templatePath) {
                 res.status(400).send("Invalid template path parameter");
                 return;
             }
-            const templatePath: string = templatePathParam;
             const fullTemplatePath = path.join(this.basePath, "../work-item-templates", templatePath);
             const templateData = this.templateProcessor.getWorkItemTemplateFromFile(fullTemplatePath);
             if (!templateData) {
@@ -117,13 +117,13 @@ export class WebApp {
             res.render("pages/template", { templatePath, templateData, templateVariables });
         });
 
-        app.post("/template/:templatePath(*)", async (req, res) => {
-            const templatePathParam: string | undefined = req.params.templatePath;
-            if (typeof templatePathParam !== "string") {
+        app.post("/template/*templatePath", async (req, res) => {
+            const templatePathArray: string[] | string | undefined = (req.params as any).templatePath;
+            const templatePath: string = Array.isArray(templatePathArray) ? templatePathArray.join("/") : templatePathArray as string;
+            if (!templatePath) {
                 res.status(400).send("Invalid template path parameter");
                 return;
             }
-            const templatePath: string = templatePathParam;
             const rawTemplateVariables: unknown = req.body;
 
             // Ensure the request body is a non-null object and not an array
