@@ -80,7 +80,7 @@ export class WebApp {
                 res.status(400).send("Invalid folder path");
                 return;
             }
-            
+
             const templates = this.templateProcessor.getWorkItemTemplates(workItemDir);
 
             if (currentDir !== "root" && templates) {
@@ -119,6 +119,17 @@ export class WebApp {
                 return;
             }
             const fullTemplatePath = path.join(this.basePath, "../work-item-templates", templatePath);
+
+            // Security check: ensure the resolved path stays within the work-item-templates folder
+            const baseDirPath = path.resolve(this.basePath, "../work-item-templates");
+            const resolvedPath = path.resolve(baseDirPath, templatePath);
+            const relativePath = path.relative(baseDirPath, resolvedPath);
+            
+            if (relativePath.startsWith("..") || path.isAbsolute(relativePath)) {
+                res.status(400).send("Invalid folder path");
+                return;
+            }
+
             const templateData = this.templateProcessor.getWorkItemTemplateFromFile(fullTemplatePath);
             if (!templateData) {
                 res.status(404).send("Template not found or invalid.");

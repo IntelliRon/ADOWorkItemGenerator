@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "build": "tsc && shx cp -r src/ui/web/app dist/ui/web/app",
+    "build": "tsc && shx mkdir -p dist/ui/web/app && shx cp -r src/ui/web/app/public dist/ui/web/app/public && shx cp -r src/ui/web/app/views dist/ui/web/app/views",
     "start": "npm run build && node dist/index.js",
     "dev": "npx ts-node --esm src/index.ts",
     "clean": "rimraf dist"

@@ -67,7 +67,9 @@ This will launch the interactive console UI instead.
 ├── src/
 │   ├── index.ts                        # Main entry point
 │   ├── core/
-│   │   └── TemplateProcessor.ts        # Reads templates and calls the ADO API
+│   │   ├── TemplateProcessor.ts        # Reads templates and calls the ADO API
+│   │   ├── findTemplateVariables.ts    # Finds template variables in strings
+│   │   └── replaceTemplateVariables.ts # Replaces template variables with values
 │   ├── ui/
 │   │   ├── console/
 │   │   │   └── ConsoleHandler.ts       # Interactive console UI
@@ -75,14 +77,24 @@ This will launch the interactive console UI instead.
 │   │       ├── WebHandler.ts           # Web UI handler
 │   │       └── app/
 │   │           ├── app.ts              # Express web app
-│   │           ├── public/             # Static assets (CSS, JS)
-│   │           └── views/              # EJS templates
+│   │           ├── public/
+│   │           │   ├── css/            # Stylesheets
+│   │           │   │   ├── index.css
+│   │           │   │   └── template.css
+│   │           │   └── js/             # Client-side scripts
+│   │           │       └── template.js
+│   │           └── views/
+│   │               └── pages/          # EJS templates
+│   │                   ├── index.ejs
+│   │                   └── template.ejs
 │   └── utils/
 │       └── ErrorCodeGenerator.ts       # Standardised error codes
 ├── work-item-templates/
-│   └── workItemTemplate.json           # Example work item template
+│   ├── workItemTemplate.json           # Example work item template
+│   └── test*/                          # Test template folders
 ├── package.json                        # Project dependencies and scripts
 ├── tsconfig.json                       # TypeScript configuration
+├── ADO Work Item Creator.code-workspace # VS Code workspace file
 └── README.md                           # This file
 ```
 
