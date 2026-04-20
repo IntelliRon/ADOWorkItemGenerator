@@ -1,0 +1,89 @@
+body {
+    text-align: center;
+}
+
+#singleWorkItemForm {
+    width: 80%;
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Form elements should be styled in a grid pattern, where each label is to the left of the input */
+/* the form fields should be centered horizontally and vertically within the form */
+.formField {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 10px auto;
+    width: 100%;
+}
+
+.formField label {
+    width: 160px;
+    min-width: 160px;
+    margin-right: 10px;
+    font-weight: bold;
+    text-align: right;
+}
+
+.formField input,
+.formField select {
+    width: 320px;
+    max-width: 320px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Submit button should span width of the labels and inputs, and be centered */
+#singleWorkItemForm button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 0 auto;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#singleWorkItemForm button:hover {
+    background-color: #0056b3;
+}
+
+/* Style for info box */
+.infoBoxContainer {
+    width: 80%;
+    max-width: 100%;
+}
+
+.infoBoxError {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    margin: 10px auto;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.closeInfoBoxButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    flex-shrink: 0;
+    margin-left: 10px;
+}
+
+.defaultHidden {
+    display: none;
+}
