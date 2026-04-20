@@ -70,6 +70,17 @@ export class WebApp {
             }
 
             let workItemDir = currentDir === "root" ? "" : currentDir;
+
+            // Security check: ensure the resolved path stays within the work-item-templates folder
+            const baseDirPath = path.resolve(this.basePath, "../work-item-templates");
+            const resolvedPath = path.resolve(baseDirPath, workItemDir);
+            const relativePath = path.relative(baseDirPath, resolvedPath);
+            
+            if (relativePath.startsWith("..") || path.isAbsolute(relativePath)) {
+                res.status(400).send("Invalid folder path");
+                return;
+            }
+            
             const templates = this.templateProcessor.getWorkItemTemplates(workItemDir);
 
             if (currentDir !== "root" && templates) {

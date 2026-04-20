@@ -4,7 +4,7 @@ $(document).ready(function () {
 
         // Post to /template/:template with form data as JSON
         // Everything after /template is the template name, which may include subdirectories
-        const templatePath = window.location.pathname.trim().split("/template/").splice(1).join("/");
+        let templatePath = window.location.pathname.trim().split("/template/").splice(1).join("/");
         // Clean any trailing query parameters from the template name
         const queryParamIndex = templatePath.indexOf("?");
         if (queryParamIndex !== -1) {
